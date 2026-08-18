@@ -24,7 +24,9 @@ curl -O https://raw.githubusercontent.com/dr4vs/xonotic-server-arm64/main/setup.
 bash setup.sh
 ```
 
-**Or build and run manually:**
+This works from any folder — if `Dockerfile` is not in the current directory, the script downloads it automatically before building.
+
+**Or build and run manually** (from the repository root):
 
 ```bash
 docker build -t xonotic-server:arm64 .
