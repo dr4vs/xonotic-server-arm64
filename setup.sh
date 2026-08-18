@@ -45,19 +45,15 @@ echo -e "${GREEN}[1/4] Building image (first build compiles the engine, it can t
 if [ ! -f Dockerfile ]; then
   echo -e "${YELLOW}Dockerfile not found here, downloading it from the repository...${NC}"
   BUILD_DIR="$(mktemp -d)"
+  trap 'rm -rf "$BUILD_DIR"' EXIT
   if ! curl -fsSL "$REPO_RAW/Dockerfile" -o "$BUILD_DIR/Dockerfile"; then
     echo -e "${YELLOW}Failed to download the Dockerfile.${NC}"
     echo "Clone the repository and run this script from its root instead."
-    rm -rf "$BUILD_DIR"
     exit 1
   fi
 fi
 
 docker build -t "$IMAGE" "$BUILD_DIR"
-
-if [ "$BUILD_DIR" != "." ]; then
-  rm -rf "$BUILD_DIR"
-fi
 
 echo -e "${GREEN}[2/4] Writing server config...${NC}"
 {
