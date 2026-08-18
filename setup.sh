@@ -36,6 +36,13 @@ read -s -p "$(echo -e "${BOLD}Server password (RCON)${NC} (press Enter for no pa
 echo ""
 SERVER_PASSWORD="$input"
 
+SERVER_PUBLIC=1
+read -p "$(echo -e "${BOLD}Make this server public${NC}? (visible in Xonotic's server list) [Y/n]: ")" input
+case "${input:-y}" in
+  [nN]*) SERVER_PUBLIC=0 ;;
+  *)     SERVER_PUBLIC=1 ;;
+esac
+
 echo ""
 REPO_RAW="https://raw.githubusercontent.com/dr4vs/xonotic-server-arm64/main"
 BUILD_DIR="."
@@ -58,7 +65,7 @@ docker build -t "$IMAGE" "$BUILD_DIR"
 echo -e "${GREEN}[2/4] Writing server config...${NC}"
 {
   echo "hostname \"$SERVER_NAME\""
-  echo "sv_public 1"
+  echo "sv_public $SERVER_PUBLIC"
   if [ -n "$SERVER_PASSWORD" ]; then
     echo "rcon_password \"$SERVER_PASSWORD\""
   fi
@@ -92,6 +99,11 @@ else
 fi
 
 echo -e "  ${BOLD}Server name:${NC}  $SERVER_NAME"
+if [ "$SERVER_PUBLIC" -eq 1 ]; then
+  echo -e "  ${BOLD}Public:${NC}       yes (listed on the master server)"
+else
+  echo -e "  ${BOLD}Public:${NC}       no (only accessible by direct connect)"
+fi
 echo -e "  ${BOLD}Connect at:${NC}   ${PUBLIC_IP}:26000"
 echo ""
 
