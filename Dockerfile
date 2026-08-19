@@ -1,7 +1,9 @@
 FROM ubuntu:24.04 AS builder
 
+ARG XONOTIC_VERSION=0.8.6
+
 ENV DEBIAN_FRONTEND=noninteractive
-ENV XONOTIC_DOWNLOAD_URL=http://dl.xonotic.org/xonotic-0.8.6.zip
+ENV XONOTIC_DOWNLOAD_URL=http://dl.xonotic.org/xonotic-${XONOTIC_VERSION}.zip
 
 RUN apt-get update && \
     apt-get upgrade -y && \

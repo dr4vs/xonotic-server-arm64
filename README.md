@@ -20,8 +20,7 @@ Depending on your machine: Docker Desktop, `apt install docker.io`, or your dist
 **Easiest way:** download and run the setup script:
 
 ```bash
-curl -O https://raw.githubusercontent.com/dr4vs/xonotic-server-arm64/main/setup.sh
-bash setup.sh
+curl -O https://raw.githubusercontent.com/dr4vs/xonotic-server-arm64/main/setup.sh && bash setup.sh
 ```
 
 This works from any folder — if `Dockerfile` is not in the current directory, the script downloads it automatically before building.

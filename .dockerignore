@@ -3,7 +3,7 @@
 .dockerignore
 README.md
 LICENSE
-server.cfg.example
+
 docker-compose.yml
 tests
 *.md

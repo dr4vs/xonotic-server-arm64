@@ -31,16 +31,20 @@ SERVER_NAME="Xonotic Server"
 read -p "$(echo -e "${BOLD}Server name${NC} (press Enter for 'Xonotic Server'): ")" input
 SERVER_NAME="${input:-$SERVER_NAME}"
 
+SERVER_VERSION="0.8.6"
+read -p "$(echo -e "${BOLD}Xonotic version${NC} (press Enter for '0.8.6'): ")" input
+SERVER_VERSION="${input:-$SERVER_VERSION}"
+
 SERVER_PASSWORD=""
 read -s -p "$(echo -e "${BOLD}Server password (RCON)${NC} (press Enter for no password): ")" input
 echo ""
 SERVER_PASSWORD="$input"
 
-SERVER_PUBLIC=1
-read -p "$(echo -e "${BOLD}Make this server public${NC}? (visible in Xonotic's server list) [Y/n]: ")" input
-case "${input:-y}" in
-  [nN]*) SERVER_PUBLIC=0 ;;
-  *)     SERVER_PUBLIC=1 ;;
+SERVER_PUBLIC=0
+read -p "$(echo -e "${BOLD}Make this server public${NC}? (visible in Xonotic's server list) [y/N]: ")" input
+case "${input:-n}" in
+  [yY]*) SERVER_PUBLIC=1 ;;
+  *)     SERVER_PUBLIC=0 ;;
 esac
 
 echo ""
@@ -60,7 +64,7 @@ if [ ! -f Dockerfile ]; then
   fi
 fi
 
-docker build -t "$IMAGE" "$BUILD_DIR"
+docker build --build-arg XONOTIC_VERSION="$SERVER_VERSION" -t "$IMAGE" "$BUILD_DIR"
 
 echo -e "${GREEN}[2/4] Writing server config...${NC}"
 {
@@ -120,11 +124,12 @@ fi
 
 echo -e "  Commands:"
 echo -e "    Stop:      ${BOLD}docker stop xonotic-server${NC}"
+echo -e "    Restart:   ${BOLD}docker restart xonotic-server${NC}"
 echo -e "    View logs: ${BOLD}docker logs xonotic-server${NC}"
 echo -e "    Remove:    ${BOLD}docker rm -f xonotic-server${NC}"
 echo ""
 
 echo -e "${CYAN}========================================${NC}"
-echo -e "${CYAN}   Built from Xonotic 0.8.6 source      ${NC}"
+echo -e "${CYAN}   Built from Xonotic ${SERVER_VERSION} source    ${NC}"
 echo -e "${CYAN}   (GPL-3.0, see Acknowledgments)       ${NC}"
 echo -e "${CYAN}========================================${NC}"
